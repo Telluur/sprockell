@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 import Sprockell.System
 
 {-
@@ -35,12 +37,13 @@ main :: IO()
 main = runDebug debugEndProg 3 prog >> putChar '\n'
 
 -- This debug function show a message when a Sprockell reaches an EndProg instruction.
-debugEndProg SysState{sprs=sprs,instrs=instrs} = concatMap isHalting sprs
+debugEndProg :: SystemState -> String
+debugEndProg SysState{..} = concatMap isHalting sprs
     where
-        isHalting SprState{regbank=regs,halted=halted}
+        isHalting SprState{..}
             | not halted && instrs!pc == EndProg
                 = "EndProg on Sprockell " ++ show spid ++ " at addr " ++ show pc ++ "\n"
             | otherwise = ""
             where
-                pc   = regs ! PC
-                spid = regs ! SPID
+                pc   = regbank ! PC
+                spid = regbank ! SPID
