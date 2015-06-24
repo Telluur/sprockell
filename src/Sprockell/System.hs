@@ -1,19 +1,10 @@
-{-# LANGUAGE RecordWildCards, GeneralizedNewtypeDeriving #-}
-module Sprockell.System
-    ( module Sprockell.Components
-    , module Sprockell.TypesEtc
-    , module Sprockell.Sprockell
-    , module Sprockell.System
-    ) where
-
-import Control.Monad
+{-# LANGUAGE RecordWildCards #-}
+module Sprockell.System (module Sprockell.System, module X) where
+import Sprockell.Components as X
+import Sprockell.TypesEtc as X
+import Sprockell.Sprockell as X
 import System.IO
-import Data.Maybe
 import Data.Bits
-import Debug.Trace
-import Sprockell.Components
-import Sprockell.TypesEtc
-import Sprockell.Sprockell
 
 data SystemConfig = SysConf
         { bufferDelay :: Int  -- bufferDelay > 0, also impacts maximum number of outstanding read requests
@@ -45,7 +36,9 @@ data SystemState = SysState
 -- ===========================================================================================
 -- IO Devices
 -- ===========================================================================================
+stdio :: MemAddr
 stdio = Addr stdioAddr
+stdioAddr :: Address
 stdioAddr = 0x1000000
 
 type IODevice = SharedMem -> Request -> IO (SharedMem, Maybe Reply)
@@ -92,7 +85,7 @@ system SysConf{..} SysState{..} = do
 
         (mem', reply)        <- processRequest req sharedMem
         let replies           = map (\i -> if i == rsid then reply else Nothing) [0..]
-        
+
         let sReqFifos''       = zipWith (maybe id enQueue) sprReqs sReqFifos'
         let repBuffers'       = zipWith (<+) repBuffers replies
 
@@ -126,7 +119,7 @@ initSystemState SysConf{..} is seed = SysState
         }
 
 run :: Int -> [Instruction] -> IO SystemState
-run n instrs = runDebug (const "") n instrs 
+run = runDebug (const "")
 
 runDebug :: (SystemState -> String) -> Int -> [Instruction] -> IO SystemState
 runDebug debugFunc n instrs = do

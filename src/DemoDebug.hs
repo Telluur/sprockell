@@ -5,7 +5,7 @@ import Sprockell.System
 -- are terminated before the shared memory gets a chance to write it.
 prog :: [Instruction]
 prog = [
-           Const 78 RegA 
+           Const 78 RegA
          , Const 10 RegB
          , Const 5  RegC
          , Write RegA (Addr 0x1000000) -- write to stdout using explicit address
@@ -22,4 +22,5 @@ debug :: SystemState -> String
 debug SysState{..} | (sharedMem !!! 0) == 5 = "First shared memaddr equals 5.\n"
 debug _ = "Not 5\n"
 
+main :: IO SystemState
 main = runDebug debug 3 prog

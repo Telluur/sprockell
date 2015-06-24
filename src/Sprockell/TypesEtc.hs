@@ -7,7 +7,7 @@ import Sprockell.Components
 -- ==========================================================================================================
 
 -- Sprockell instructions
-data Instruction = 
+data Instruction =
           Compute Operator Reg Reg Reg       -- Compute opCode r0 r1 r2: go to "alu",
                                              --       do "opCode" on regs r0, r1, and put result in reg r2
         | Const Value Reg                    -- Const v r: put value v in register r
@@ -56,7 +56,7 @@ data Target = Abs CodeAddr
             | Ind Reg
             deriving (Eq,Show,Read)
 
-data Operator = Add  | Sub | Mul  | Div | Mod 
+data Operator = Add  | Sub | Mul  | Div | Mod
               -- comparision operations
               |  Equal | NEq | Gt | Lt | GtE | LtE
               -- logical/binary operations
@@ -91,7 +91,7 @@ data AguCode = AguImm
 
 data LdCode = LdImm
             | LdMem
-            | LdInp 
+            | LdInp
             deriving (Eq,Show)
 
 data StCode = StNone
@@ -107,7 +107,7 @@ data IOCode = IONone
 data MachCode = MachCode
         { ldCode    :: LdCode       -- source of load results
         , stCode    :: StCode       -- store command
-        , aguCode   :: AguCode      -- address calculation 
+        , aguCode   :: AguCode      -- address calculation
         , aluCode   :: Operator     -- arithmetic operation
         , ioCode    :: IOCode       -- communication with the rest of the system
         , immValue  :: Value        -- value from Immediate

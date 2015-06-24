@@ -4,7 +4,6 @@ module Sprockell.Sprockell where
 
 import Data.Bits
 import Data.Maybe
-import Debug.Trace
 import Sprockell.Components
 import Sprockell.TypesEtc
 
@@ -21,7 +20,7 @@ import Sprockell.TypesEtc
 -------------------------------------------------------------}
 
 initSprockell :: Int -> Value -> SprockellState
-initSprockell dataMemSize ident = SprState 
+initSprockell dataMemSize ident = SprState
   { regbank  = initRegFile 0 <<~~ [(SPID, ident), (SP, fromIntegral dataMemSize)]
   , localMem = initMemory
   , halted   = False
@@ -65,7 +64,7 @@ sprockell instrs SprState{..} reply = (sprState, request)
         localMem'    = storeUnit localMem stCode address regY
 
         request      = sendOut ioCode address regY
-        
+
         cond         = condition condCode regX (isJust reply)
         jumpTarget   = targetPC target pc regY immValue
         nextPC       = if cond then jumpTarget else pc + 1
@@ -82,7 +81,7 @@ decode instr = case instr of
     Nop                  -> nullcode
     Compute c rx ry res  -> nullcode {aluCode=c, inputX=rx, inputY=ry, result=res}
     Const n r            -> nullcode {ldCode=LdImm, immValue=n, loadReg=r}
-    
+
     Branch cr (Abs n)    -> nullcode {condCode=CReg, inputX=cr, target=TAbs, immValue=n}
     Branch cr (Rel n)    -> nullcode {condCode=CReg, inputX=cr, target=TRel, immValue=n}
     Branch cr (Ind i)    -> nullcode {condCode=CReg, inputX=cr, target=TInd, inputY=i}
@@ -142,7 +141,7 @@ agu aguCode addr derefAddr = case aguCode of
         AguImm   -> addr
         AguDeref -> derefAddr
         AguDown  -> derefAddr - 1
-        
+
 -- ============================
 loadUnit :: LocalMem -> LdCode -> Address -> Maybe Reply -> Value -> Value
 loadUnit mem ldCode address reply immval = case (ldCode, reply) of

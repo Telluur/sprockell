@@ -6,7 +6,7 @@ import Sprockell.System
     All the sprockells try to write their own letter to the screen at the same time.
     They will all be succeed, but the order in which this happens is undefined.
 -}
-
+loopCount :: Value
 loopCount = 10
 
 prog :: [Instruction]
@@ -30,6 +30,5 @@ prog = [
          , EndProg
        ]
 
-
+main :: IO()
 main = run 4 prog >> putChar '\n'
-

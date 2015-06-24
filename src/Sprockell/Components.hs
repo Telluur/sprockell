@@ -48,8 +48,8 @@ initLookupTable n xs = LookupTable n $ IA.listArray (0, fromIntegral (length xs)
 
 instance MemoryStructure LookupTable where
     (<~) = error "read only lookup table"
-    (LookupTable n xs) ! i 
-        | i < lo || i > hi = error ("index " ++ show i ++ " out of bounds for " ++ n) 
+    (LookupTable n xs) ! i
+        | i < lo || i > hi = error ("index " ++ show i ++ " out of bounds for " ++ n)
         | otherwise = xs IA.! i
         where (lo, hi) = IA.bounds xs
 
@@ -62,7 +62,7 @@ initBuffer n x = Buffer (replicate n x)
 (Buffer xs) <+ x = Buffer (drop 1 xs ++ [x])
 
 peek :: Buffer a -> a
-peek (Buffer (x:xs)) = x
+peek (Buffer (x:_)) = x
 
 newtype Fifo a = Fifo [a]
 

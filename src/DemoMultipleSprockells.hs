@@ -31,11 +31,11 @@ prog = [
          , EndProg
        ]
 
-
+main :: IO()
 main = runDebug debugEndProg 3 prog >> putChar '\n'
 
 -- This debug function show a message when a Sprockell reaches an EndProg instruction.
-debugEndProg SysState{sprs=sprs,instrs=instrs} = concat $ map isHalting sprs
+debugEndProg SysState{sprs=sprs,instrs=instrs} = concatMap isHalting sprs
     where
         isHalting SprState{regbank=regs,halted=halted}
             | not halted && instrs!pc == EndProg
