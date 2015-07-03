@@ -96,12 +96,13 @@ system SysConf{..} SysState{..} = do
 -- ===========================================================================================
 -- ===========================================================================================
 -- "Simulates" sprockells by recursively calling them over and over again
-simulate :: SystemConfig -> (SystemState -> String) -> SystemState -> IO SystemState
+simulate :: SystemConfig -> (SystemState -> IO()) -> SystemState -> IO SystemState
 simulate sysConf debugFunc sysState@SysState{..}
     | all halted sprs && all isEmptyQueue sReqFifos  = return sysState
     | otherwise = do
         sysState' <- system sysConf sysState
-        putStr (debugFunc sysState')
+        --putStr (debugFunc sysState')
+        debugFunc sysState'
         simulate sysConf debugFunc sysState'
 
 -- ===========================================================================================
@@ -118,18 +119,18 @@ initSystemState SysConf{..} is seed = SysState
         , cycleCount = 0
         }
 
-run :: Int -> [Instruction] -> IO SystemState
-run = runDebug (const "")
+--run :: Int -> [Instruction] -> IO SystemState
+--run = runDebug ()
 
-runDebug :: (SystemState -> String) -> Int -> [Instruction] -> IO SystemState
+runDebug :: (SystemState -> IO()) -> Int -> [Instruction] -> IO SystemState
 runDebug debugFunc n instrs = do
     seed <- pickSeed
     runDebugWithSeed seed debugFunc n instrs
 
-runWithSeed :: Seed -> Int -> [Instruction] -> IO SystemState
-runWithSeed seed = runDebugWithSeed seed (const "")
+--runWithSeed :: Seed -> Int -> [Instruction] -> IO SystemState
+--runWithSeed seed = runDebugWithSeed seed (const "")
 
-runDebugWithSeed :: Seed -> (SystemState -> String) -> Int -> [Instruction] -> IO SystemState
+runDebugWithSeed :: Seed -> (SystemState -> IO()) -> Int -> [Instruction] -> IO SystemState
 runDebugWithSeed seed debugFunc n instrs = do
     let sysConf = defaultConfig {coreCount = n}
     hPutStrLn stderr ("Starting with random seed: " ++ show seed)
