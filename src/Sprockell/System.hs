@@ -119,16 +119,16 @@ initSystemState SysConf{..} is seed = SysState
         , cycleCount = 0
         }
 
---run :: Int -> [Instruction] -> IO SystemState
---run = runDebug ()
+run :: Int -> [Instruction] -> IO SystemState
+run = runDebug (\_ -> return())
 
 runDebug :: (SystemState -> IO()) -> Int -> [Instruction] -> IO SystemState
 runDebug debugFunc n instrs = do
     seed <- pickSeed
     runDebugWithSeed seed debugFunc n instrs
 
---runWithSeed :: Seed -> Int -> [Instruction] -> IO SystemState
---runWithSeed seed = runDebugWithSeed seed (const "")
+runWithSeed :: Seed -> Int -> [Instruction] -> IO SystemState
+runWithSeed seed = runDebugWithSeed seed (\_ -> return())
 
 runDebugWithSeed :: Seed -> (SystemState -> IO()) -> Int -> [Instruction] -> IO SystemState
 runDebugWithSeed seed debugFunc n instrs = do
