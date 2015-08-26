@@ -1,0 +1,90 @@
+{-# LANGUAGE RecordWildCards #-}
+import Sprockell.System
+
+prog :: [Instruction]
+prog = [
+
+     Const 1 RegA,
+     Store RegA (Addr 0),
+     Const 60 RegA,
+     Const 2 RegB,
+     Compute Add RegA RegB RegA,
+     Store RegA (Addr 1),
+     Const 60 RegA,
+     Const 2 RegB,
+     Compute Sub RegA RegB RegA,
+     Store RegA (Addr 2),
+     Const 60 RegA,
+     Const 2 RegB,
+     Compute Mul RegA RegB RegA,
+     Store RegA (Addr 3),
+     Const 60 RegA,
+     Const 2 RegB,
+     Compute Div RegA RegB RegA,
+     Store RegA (Addr 4),
+     Const 2 RegA,
+     Const 6 RegB,
+     Compute Mul RegA RegB RegA,
+     Const 3 RegB,
+     Compute Div RegA RegB RegA,
+     Const 1 RegB,
+     Compute Add RegB RegA RegB,
+     Store RegB (Addr 5),
+     Const 1 RegA,
+     Const 2 RegB,
+     Compute Add RegA RegB RegA,
+     Const 6 RegB,
+     Compute Mul RegA RegB RegA,
+     Const 3 RegB,
+     Compute Div RegA RegB RegA,
+     Store RegA (Addr 6),
+     Const 1 RegA,
+     Store RegA (Addr 7),
+     Const 0 RegA,
+     Store RegA (Addr 8),
+     Const 1 RegA,
+     Const 1 RegB,
+     Compute And RegA RegB RegA,
+     Store RegA (Addr 9),
+     Const 1 RegA,
+     Const 2 RegB,
+     Compute Add RegA RegB RegA,
+     Const 4 RegB,
+     Compute Lt RegA RegB RegA,
+     Const 0 RegB,
+     Compute Or RegA RegB RegA,
+     Store RegA (Addr 10),
+     Load (Addr 0) RegA,
+     Write RegA stdio,
+     Load (Addr 1) RegA,
+     Write RegA stdio,
+     Load (Addr 2) RegA,
+     Write RegA stdio,
+     Load (Addr 3) RegA,
+     Write RegA stdio,
+     Load (Addr 4) RegA,
+     Write RegA stdio,
+     Load (Addr 5) RegA,
+     Write RegA stdio,
+     Load (Addr 6) RegA,
+     Write RegA stdio,
+     Load (Addr 7) RegA,
+     Write RegA stdio,
+     Load (Addr 8) RegA,
+     Write RegA stdio,
+     Load (Addr 9) RegA,
+     Write RegA stdio,
+     Load (Addr 10) RegA,
+     Write RegA stdio,
+     Nop,
+     EndProg
+        ]
+
+main :: IO()
+main = do
+  putStr "###BEGIN###"
+  _ <- run 1 prog
+  putStr "###END###\n"
+  return ()
+
+
